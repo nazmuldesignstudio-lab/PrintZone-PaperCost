@@ -11,6 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Organize files
+        run: |
+          mkdir -p www assets
+          if [ -f index.html ]; then mv index.html www/index.html; fi
+          if [ -f splash.jpg ]; then mv splash.jpg www/splash.jpg; fi
+          for f in icon-only icon-foreground icon-background splash splash-dark; do
+            if [ -f "$f.png" ]; then mv "$f.png" "assets/$f.png"; fi
+          done
+          if [ -f capacitor_config.json ] && [ ! -f capacitor.config.json ]; then
+            mv capacitor_config.json capacitor.config.json
+          fi
+          echo "--- repo files ---"
+          ls -R www assets
+          ls -la
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
