@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Organize files
+      - name: Organize files and create config
         run: |
           mkdir -p www assets
           if [ -f index.html ]; then mv index.html www/index.html; fi
@@ -19,12 +19,46 @@ jobs:
           for f in icon-only icon-foreground icon-background splash splash-dark; do
             if [ -f "$f.png" ]; then mv "$f.png" "assets/$f.png"; fi
           done
-          if [ -f capacitor_config.json ] && [ ! -f capacitor.config.json ]; then
-            mv capacitor_config.json capacitor.config.json
-          fi
-          echo "--- repo files ---"
-          ls -R www assets
+
+          cat > package.json <<'EOF'
+          {
+            "name": "printzone-papercost",
+            "version": "1.0.0",
+            "private": true,
+            "dependencies": {
+              "@capacitor/android": "^6.1.2",
+              "@capacitor/core": "^6.1.2",
+              "@capacitor/splash-screen": "^6.0.2"
+            },
+            "devDependencies": {
+              "@capacitor/assets": "^3.0.5",
+              "@capacitor/cli": "^6.1.2"
+            }
+          }
+          EOF
+
+          cat > capacitor.config.json <<'EOF'
+          {
+            "appId": "com.printzone.papercost",
+            "appName": "PrintZone-PaperCost",
+            "webDir": "www",
+            "backgroundColor": "#0b7a35",
+            "plugins": {
+              "SplashScreen": {
+                "launchShowDuration": 600,
+                "launchAutoHide": true,
+                "backgroundColor": "#0b7a35",
+                "androidScaleType": "CENTER_CROP",
+                "showSpinner": false
+              }
+            }
+          }
+          EOF
+
+          echo "--- files ---"
           ls -la
+          ls -la www assets
+          test -f www/index.html || (echo "ERROR: index.html repo te nei" && exit 1)
 
       - uses: actions/setup-node@v4
         with:
