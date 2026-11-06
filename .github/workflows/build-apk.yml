@@ -13,6 +13,10 @@ jobs:
 
       - name: Organize files and create config
         run: |
+          if [ -d PrintZone-PaperCost ]; then
+            cp -r PrintZone-PaperCost/. .
+          fi
+
           mkdir -p www assets
           if [ -f index.html ]; then mv index.html www/index.html; fi
           if [ -f splash.jpg ]; then mv splash.jpg www/splash.jpg; fi
@@ -58,7 +62,8 @@ jobs:
           echo "--- files ---"
           ls -la
           ls -la www assets
-          test -f www/index.html || (echo "ERROR: index.html repo te nei" && exit 1)
+          test -f www/index.html || (echo "ERROR: www/index.html nei" && exit 1)
+          test -f assets/icon-only.png || (echo "ERROR: assets/icon-only.png nei" && exit 1)
 
       - uses: actions/setup-node@v4
         with:
