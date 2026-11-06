@@ -1,0 +1,15 @@
+{
+  "name": "printzone-papercost",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PrintZone-PaperCost - Paper Cost Calculator",
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/splash-screen": "^6.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.2"
+  }
+}
